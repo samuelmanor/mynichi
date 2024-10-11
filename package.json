@@ -3,8 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -14,7 +12,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "vitest run",
     "eject": "react-scripts eject",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
@@ -49,9 +47,14 @@
     "@storybook/react": "^8.3.3",
     "@storybook/react-webpack5": "^8.3.3",
     "@storybook/test": "^8.3.3",
+    "@testing-library/jest-dom": "^6.5.0",
+    "@testing-library/react": "^16.0.1",
     "eslint-plugin-storybook": "^0.8.0",
+    "jsdom": "^25.0.1",
     "prop-types": "^15.8.1",
     "storybook": "^8.3.3",
+    "vite": "^5.4.8",
+    "vitest": "^2.1.2",
     "webpack": "^5.94.0"
   }
 }
