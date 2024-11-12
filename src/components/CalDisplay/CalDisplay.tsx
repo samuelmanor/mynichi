@@ -1,13 +1,17 @@
 import React from "react";
 import { FC } from "react";
+import { useSelector } from "react-redux";
 
 interface CalDisplayProps {}
 
 export const CalDisplay: FC<CalDisplayProps> = () => {
-  const getDate = () => {
-    const date = new Date();
-    return date.toDateString();
-  };
+  const date = useSelector((state: any) => state.date);
 
-  return <div onClick={() => console.log(getDate())}>test</div>;
+  return (
+    <div onClick={() => console.log(date)}>
+      <p>{date.month}</p>
+      <p>{date.day.number}</p>
+      <p>{date.day.name}</p>
+    </div>
+  );
 };

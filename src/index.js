@@ -4,12 +4,7 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
-import pageReducer from "./reducers/PageReducer";
-import { configureStore } from "@reduxjs/toolkit";
-
-const store = configureStore({
-  reducer: pageReducer,
-});
+import store from "./reducers/store";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
