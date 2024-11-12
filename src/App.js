@@ -1,20 +1,15 @@
-import logo from "./logo.svg";
-import "./App.css";
-import { CalDisplay } from "./components/CalDisplay";
-import { getDate } from "./reducers/PageReducer";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { Page } from "./components/Page";
 
 function App() {
-  const dispatch = useDispatch();
-
   useEffect(() => {
-    dispatch(getDate());
+    // get current date
+    // load page that matches date
   }, []);
 
   return (
-    <div className="App">
-      <CalDisplay />
+    <div>
+      <Page />
     </div>
   );
 }

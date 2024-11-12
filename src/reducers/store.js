@@ -1,7 +1,11 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 
-import pageReducer from "./PageReducer";
+import PageReducer from "./PageReducer";
+import JournalReducer from "./JournalReducer";
 
-export default configureStore({
-  reducer: pageReducer,
+const reducer = combineReducers({
+  page: PageReducer,
+  journal: JournalReducer,
 });
+
+export default configureStore({ reducer });
