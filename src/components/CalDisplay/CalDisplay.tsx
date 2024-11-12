@@ -4,5 +4,10 @@ import { FC } from "react";
 interface CalDisplayProps {}
 
 export const CalDisplay: FC<CalDisplayProps> = () => {
-  return <>CalDisplay component!</>;
+  const getDate = () => {
+    const date = new Date();
+    return date.toDateString();
+  };
+
+  return <div onClick={() => console.log(getDate())}>test</div>;
 };
