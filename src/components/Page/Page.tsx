@@ -2,7 +2,8 @@ import React from "react";
 import { FC } from "react";
 import { CalDisplay, Date } from "../CalDisplay";
 
-export type Page = {
+export type PageType = {
+  id: number;
   date: Date;
 };
 

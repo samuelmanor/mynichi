@@ -5,6 +5,7 @@ const journalSlice = createSlice({
   initialState: {
     pages: [
       {
+        id: 1,
         date: {
           month: 11,
           day: {
@@ -15,6 +16,7 @@ const journalSlice = createSlice({
         },
       },
       {
+        id: 2,
         date: {
           month: 11,
           day: {
@@ -26,6 +28,9 @@ const journalSlice = createSlice({
       },
     ],
   },
+  reducers: {},
 });
+
+export const {} = journalSlice.actions;
 
 export default journalSlice.reducer;
