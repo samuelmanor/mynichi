@@ -11,23 +11,25 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // get today's date
-    const today = getFormattedDate();
+    if (pages) {
+      // get today's date
+      const today = getFormattedDate();
 
-    // check if there is a page for today
-    const page = pages.find(
-      (page) =>
-        page.date.year === today.year &&
-        page.date.month === today.month &&
-        page.date.day.number === today.day.number
-    );
+      // check if there is a page for today
+      const page = pages.find(
+        (page) =>
+          page.date.year === today.year &&
+          page.date.month === today.month &&
+          page.date.day.number === today.day.number
+      );
 
-    if (page) {
-      // if there is a page for today, set it as the current page
-      dispatch(setCurrentPage(page));
-    } else {
-      // if there is no page for today, create a new page
-      dispatch(addPage(today));
+      if (page) {
+        // if there is a page for today, set it as the current page
+        dispatch(setCurrentPage(page));
+      } else {
+        // if there is no page for today, create a new page
+        dispatch(addPage(today));
+      }
     }
   }, [dispatch, pages]);
 
