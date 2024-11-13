@@ -28,9 +28,16 @@ const journalSlice = createSlice({
       },
     ],
   },
-  reducers: {},
+  reducers: {
+    addPage(state, action) {
+      state.pages.push({
+        id: state.pages.length + 1,
+        date: action.payload,
+      });
+    },
+  },
 });
 
-export const {} = journalSlice.actions;
+export const { addPage } = journalSlice.actions;
 
 export default journalSlice.reducer;

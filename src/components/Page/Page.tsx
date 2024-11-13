@@ -1,6 +1,7 @@
 import React from "react";
 import { FC } from "react";
-import { CalDisplay, Date } from "../CalDisplay";
+import { CalDisplay } from "../CalDisplay";
+import { Date } from "../../utils/getFormattedDate";
 
 export type PageType = {
   id: number;
