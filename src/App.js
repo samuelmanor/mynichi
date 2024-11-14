@@ -4,34 +4,33 @@ import { useDispatch, useSelector } from "react-redux";
 import { setCurrentPage } from "./reducers/PageReducer";
 import { addPage } from "./reducers/JournalReducer";
 import { getFormattedDate } from "./utils/getFormattedDate";
+import { getTodaysPage } from "./reducers/PageReducer";
+import { gql, useQuery } from "@apollo/client";
+import { FIND_PAGE, GET_PAGE_COUNT } from "./utils/queries";
+
+const TEST_QUERY = gql`
+  query {
+    pageCount
+  }
+`;
 
 function App() {
-  const pages = useSelector((state) => state.journal.pages);
+  const today = getFormattedDate();
+  // const todaysPage = useQuery(FIND_PAGE, {
+  //   variables: {
+  //     month: today.month,
+  //     dayNum: today.day.number,
+  //     year: today.year,
+  //   },
+  // });
 
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (pages) {
-      // get today's date
-      const today = getFormattedDate();
-
-      // check if there is a page for today
-      const page = pages.find(
-        (page) =>
-          page.date.year === today.year &&
-          page.date.month === today.month &&
-          page.date.day.number === today.day.number
-      );
-
-      if (page) {
-        // if there is a page for today, set it as the current page
-        dispatch(setCurrentPage(page));
-      } else {
-        // if there is no page for today, create a new page
-        dispatch(addPage(today));
-      }
-    }
-  }, [dispatch, pages]);
+  // useEffect(() => {
+  //   if (todaysPage.data) {
+  //     console.log("todaysPage", todaysPage.data.findPage);
+  //   }
+  // }, [todaysPage]);
+  const result = useQuery(GET_PAGE_COUNT);
+  console.log(result);
 
   return (
     <div>

@@ -2,11 +2,7 @@ import React from "react";
 import { FC } from "react";
 import { CalDisplay } from "../CalDisplay";
 import { Date } from "../../utils/getFormattedDate";
-
-export type PageType = {
-  id: number;
-  date: Date;
-};
+// import { PageSchema } from "../../../graphql/pages/types";
 
 interface PageProps {}
 
