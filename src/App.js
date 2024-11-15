@@ -2,35 +2,30 @@ import { useEffect } from "react";
 import { Page } from "./components/Page";
 import { useDispatch, useSelector } from "react-redux";
 import { setCurrentPage } from "./reducers/PageReducer";
-import { addPage } from "./reducers/JournalReducer";
 import { getFormattedDate } from "./utils/getFormattedDate";
-import { getTodaysPage } from "./reducers/PageReducer";
-import { gql, useQuery } from "@apollo/client";
-import { FIND_PAGE, GET_PAGE_COUNT } from "./utils/queries";
-
-const TEST_QUERY = gql`
-  query {
-    pageCount
-  }
-`;
+import { gql, useMutation, useQuery } from "@apollo/client";
+import { FIND_PAGE, ADD_PAGE, GET_PAGE_COUNT } from "./utils/queries";
 
 function App() {
-  const today = getFormattedDate();
-  // const todaysPage = useQuery(FIND_PAGE, {
-  //   variables: {
-  //     month: today.month,
-  //     dayNum: today.day.number,
-  //     year: today.year,
-  //   },
-  // });
+  const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   if (todaysPage.data) {
-  //     console.log("todaysPage", todaysPage.data.findPage);
-  //   }
-  // }, [todaysPage]);
-  const result = useQuery(GET_PAGE_COUNT);
-  console.log(result);
+  const today = getFormattedDate();
+  const [getTodaysPage, { result, data, loading }] = useMutation(ADD_PAGE, {
+    refetchQueries: [{ query: GET_PAGE_COUNT }],
+    variables: {
+      month: today.month,
+      dayName: today.day.name,
+      dayNum: today.day.number,
+      year: today.year,
+    },
+    onCompleted: (data) => {
+      dispatch(setCurrentPage(data.addPage));
+    },
+  });
+
+  useEffect(() => {
+    getTodaysPage();
+  }, [getTodaysPage]);
 
   return (
     <div>

@@ -2,7 +2,7 @@ const { gql } = require("@apollo/client");
 const { ApolloServer } = require("@apollo/server");
 const { startStandaloneServer } = require("@apollo/server/standalone");
 
-// // const { v1: uuid } = require("uuid");
+const { v1: uuid } = require("uuid");
 
 let pages = [
   {
@@ -50,6 +50,10 @@ const typeDefs = gql`
     pageCount: Int!
     findPage(month: Int!, dayNum: Int!, year: Int!): Page
   }
+
+  type Mutation {
+    addPage(month: Int!, dayName: String!, dayNum: Int!, year: Int!): Page
+  }
 `;
 
 const resolvers = {
@@ -65,11 +69,42 @@ const resolvers = {
       );
     },
   },
+  Mutation: {
+    addPage: (root, args) => {
+      const pageAlreadyExists = pages.find((p) => {
+        return (
+          p.date.month === args.month &&
+          p.date.day.number === args.dayNum &&
+          p.date.year === args.year
+        );
+      });
+
+      if (pageAlreadyExists) {
+        return pageAlreadyExists;
+      } else {
+        const newPage = {
+          id: uuid(),
+          date: {
+            month: args.month,
+            day: {
+              name: args.dayName,
+              number: args.dayNum,
+            },
+            year: args.year,
+          },
+        };
+
+        pages.push(newPage);
+        return newPage;
+      }
+    },
+  },
 };
 
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  csrfPrevention: false,
 });
 
 startStandaloneServer(server, {
