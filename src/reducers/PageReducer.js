@@ -29,17 +29,28 @@ const pageSlice = createSlice({
         year: 0,
       },
     },
-    pageCount: 1,
+    pageCount: 0,
   },
   reducers: {
     setCurrentPage(state, action) {
-      console.log("setCurrentPage", action.payload);
-      state.id = action.payload.id;
-      state.date = action.payload.date;
+      // console.log("setCurrentPage", action.payload);
+      state.currentPage.id = action.payload.id;
+      state.currentPage.date = {
+        day: {
+          name: action.payload.date.day.name,
+          number: action.payload.date.day.number,
+        },
+        month: action.payload.date.month,
+        year: action.payload.date.year,
+      };
     },
+  },
+  setPageCount(state, action) {
+    // state.pageCount = action.payload;
+    state.pageCount = action.payload;
   },
 });
 
-export const { setCurrentPage } = pageSlice.actions;
+export const { setCurrentPage, setPageCount } = pageSlice.actions;
 
 export default pageSlice.reducer;

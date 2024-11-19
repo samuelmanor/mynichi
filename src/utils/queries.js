@@ -22,6 +22,19 @@ export const GET_PAGE_COUNT = gql`
   }
 `;
 
+export const GET_AVAILABLE_PAGES = gql`
+  query {
+    getAvailablePages {
+      month
+      day {
+        number
+        name
+      }
+      year
+    }
+  }
+`;
+
 export const ADD_PAGE = gql`
   mutation addPage(
     $month: Int!

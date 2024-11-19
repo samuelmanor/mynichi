@@ -21,8 +21,8 @@ let pages = [
     date: {
       month: 11,
       day: {
-        number: 12,
-        name: "tue",
+        number: 18,
+        name: "mon",
       },
       year: 2024,
     },
@@ -49,6 +49,7 @@ const typeDefs = gql`
   type Query {
     pageCount: Int!
     findPage(month: Int!, dayNum: Int!, year: Int!): Page
+    getAvailablePages: [Date]
   }
 
   type Mutation {
@@ -67,6 +68,9 @@ const resolvers = {
           page.date.day.number === dayNum &&
           page.date.year === year
       );
+    },
+    getAvailablePages: () => {
+      return pages.map((page) => page.date);
     },
   },
   Mutation: {

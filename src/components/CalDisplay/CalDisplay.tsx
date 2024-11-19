@@ -6,7 +6,7 @@ interface CalDisplayProps {}
 
 export const CalDisplay: FC<CalDisplayProps> = () => {
   // const date = useSelector((state: any) => state.page.date);
-  const date = useSelector((state: any) => state.date);
+  const date = useSelector((state: any) => state.currentPage.date);
 
   return (
     <div>
