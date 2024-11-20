@@ -49,7 +49,7 @@ const typeDefs = gql`
   type Query {
     pageCount: Int!
     findPage(month: Int!, dayNum: Int!, year: Int!): Page
-    getAvailablePages: [Date]
+    getAvailablePages: [ID]
   }
 
   type Mutation {
@@ -70,7 +70,7 @@ const resolvers = {
       );
     },
     getAvailablePages: () => {
-      return pages.map((page) => page.date);
+      return pages.map((page) => page.id);
     },
   },
   Mutation: {

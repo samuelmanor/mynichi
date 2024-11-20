@@ -24,14 +24,7 @@ export const GET_PAGE_COUNT = gql`
 
 export const GET_AVAILABLE_PAGES = gql`
   query {
-    getAvailablePages {
-      month
-      day {
-        number
-        name
-      }
-      year
-    }
+    getAvailablePages
   }
 `;
 

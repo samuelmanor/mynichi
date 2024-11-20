@@ -33,7 +33,7 @@ const pageSlice = createSlice({
   },
   reducers: {
     setCurrentPage(state, action) {
-      // console.log("setCurrentPage", action.payload);
+      console.log("setCurrentPage", action.payload);
       state.currentPage.id = action.payload.id;
       state.currentPage.date = {
         day: {
