@@ -17,33 +17,32 @@ export const NavArrow: FC<NavArrowProps> = () => {
   const availablePages = useQuery(GET_AVAILABLE_PAGES);
   const currentPage = useSelector((state: any) => state.currentPage);
 
-  const [prevPageIndex, setPrevPageIndex] = useState<number | null>(null);
-  const [nextPageIndex, setNextPageIndex] = useState<number | null>(null);
+  // const [prevPageIndex, setPrevPageIndex] = useState<number | null>(null);
+  // const [nextPageIndex, setNextPageIndex] = useState<number | null>(null);
 
   useEffect(() => {
-    if (availablePages.data) {
-      const pages = availablePages.data.getAvailablePages;
-      const currentPageIndex = pages.findIndex((id: string) => {
-        return id === currentPage.id;
-      });
-      console.log("current page index", currentPageIndex);
-      if (currentPageIndex > 0) {
-        setPrevPageIndex(currentPageIndex - 1);
-      } else {
-        setPrevPageIndex(null);
-      }
-
-      if (currentPageIndex < pages.length - 1) {
-        setNextPageIndex(currentPageIndex + 1);
-      } else {
-        setNextPageIndex(null);
-      }
-    }
+    // if (availablePages.data) {
+    //   const pages = availablePages.data.getAvailablePages;
+    //   const currentPageIndex = pages.findIndex((id: string) => {
+    //     return id === currentPage.id;
+    //   });
+    //   console.log("current page index", currentPageIndex);
+    //   if (currentPageIndex > 0) {
+    //     setPrevPageIndex(currentPageIndex - 1);
+    //   } else {
+    //     setPrevPageIndex(null);
+    //   }
+    //   if (currentPageIndex < pages.length - 1) {
+    //     setNextPageIndex(currentPageIndex + 1);
+    //   } else {
+    //     setNextPageIndex(null);
+    //   }
+    // }
   }, [availablePages.data, currentPage.id]);
 
   return (
     <div>
-      <button
+      {/* <button
         style={{ display: prevPageIndex !== null ? "" : "none" }}
         onClick={() => {
           console.log(prevPageIndex);
@@ -58,7 +57,7 @@ export const NavArrow: FC<NavArrowProps> = () => {
         }}
       >
         next page
-      </button>
+      </button> */}
     </div>
   );
 };
