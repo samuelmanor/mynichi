@@ -17,7 +17,7 @@ function App() {
 
   const today = getFormattedDate();
   const [getTodaysPage, { result, data, loading }] = useMutation(ADD_PAGE, {
-    refetchQueries: [{ query: GET_PAGE_COUNT, GET_AVAILABLE_PAGES }],
+    refetchQueries: [{ query: GET_PAGE_COUNT, query: GET_AVAILABLE_PAGES }],
     variables: {
       month: today.month,
       dayName: today.day.name,

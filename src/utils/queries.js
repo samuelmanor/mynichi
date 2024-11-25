@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client";
 
 export const FIND_PAGE = gql`
-  query findPage($month: Int!, $dayNum: Int!, $year: Int!) {
-    findPage(month: $month, dayNum: $dayNum, year: $year) {
+  query findPage($month: Int, $dayNum: Int, $year: Int, $id: String) {
+    findPage(month: $month, dayNum: $dayNum, year: $year, id: $id) {
       id
       date {
         month

@@ -5,59 +5,68 @@ import { FC } from "react";
 import { GET_AVAILABLE_PAGES, FIND_PAGE } from "../../utils/queries";
 import { useDispatch, useSelector } from "react-redux";
 // @ts-ignore
-import { Page } from "../../utils/gql";
-// @ts-ignore
 import { setCurrentPage } from "../../reducers/PageReducer";
 
 interface NavArrowProps {}
 
 export const NavArrow: FC<NavArrowProps> = () => {
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const availablePages = useQuery(GET_AVAILABLE_PAGES);
   const currentPage = useSelector((state: any) => state.currentPage);
 
-  // const [prevPageIndex, setPrevPageIndex] = useState<number | null>(null);
-  // const [nextPageIndex, setNextPageIndex] = useState<number | null>(null);
+  const [prevPageId, setPrevPageId] = useState<string | null>(null);
+  const [nextPageId, setNextPageId] = useState<string | null>(null);
 
   useEffect(() => {
-    // if (availablePages.data) {
-    //   const pages = availablePages.data.getAvailablePages;
-    //   const currentPageIndex = pages.findIndex((id: string) => {
-    //     return id === currentPage.id;
-    //   });
-    //   console.log("current page index", currentPageIndex);
-    //   if (currentPageIndex > 0) {
-    //     setPrevPageIndex(currentPageIndex - 1);
-    //   } else {
-    //     setPrevPageIndex(null);
-    //   }
-    //   if (currentPageIndex < pages.length - 1) {
-    //     setNextPageIndex(currentPageIndex + 1);
-    //   } else {
-    //     setNextPageIndex(null);
-    //   }
-    // }
+    if (availablePages.data) {
+      // find index of the current page within the available pages
+      const currentPageIndex = availablePages.data.getAvailablePages.findIndex(
+        (id: string) => id === currentPage.id
+      );
+      // if currentPageIndex is found, set the prevPageIndex and nextPageIndex
+      if (currentPageIndex !== -1) {
+        if (currentPageIndex > 0) {
+          setPrevPageId(
+            availablePages.data.getAvailablePages[currentPageIndex - 1]
+          );
+        } else {
+          setPrevPageId(null);
+        }
+        if (
+          currentPageIndex <
+          availablePages.data.getAvailablePages.length - 1
+        ) {
+          setNextPageId(
+            availablePages.data.getAvailablePages[currentPageIndex + 1]
+          );
+        } else {
+          setNextPageId(null);
+        }
+      }
+    }
   }, [availablePages.data, currentPage.id]);
+
+  const [changePage] = useLazyQuery(FIND_PAGE, {
+    onCompleted: (data) => {
+      dispatch(setCurrentPage(data.findPage));
+    },
+  });
 
   return (
     <div>
-      {/* <button
-        style={{ display: prevPageIndex !== null ? "" : "none" }}
-        onClick={() => {
-          console.log(prevPageIndex);
-        }}
+      <button
+        onClick={() => changePage({ variables: { id: prevPageId } })}
+        style={{ display: prevPageId === null ? "none" : "" }}
       >
-        prev page
+        to prev page
       </button>
       <button
-        style={{ display: nextPageIndex !== null ? "" : "none" }}
-        onClick={() => {
-          console.log(nextPageIndex);
-        }}
+        onClick={() => changePage({ variables: { id: nextPageId } })}
+        style={{ display: nextPageId === null ? "none" : "" }}
       >
-        next page
-      </button> */}
+        to next page
+      </button>
     </div>
   );
 };

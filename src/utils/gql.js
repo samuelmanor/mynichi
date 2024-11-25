@@ -6,7 +6,7 @@ const { v1: uuid } = require("uuid");
 
 let pages = [
   {
-    id: 1,
+    id: "1",
     date: {
       month: 11,
       day: {
@@ -17,7 +17,7 @@ let pages = [
     },
   },
   {
-    id: 2,
+    id: "2",
     date: {
       month: 11,
       day: {
@@ -48,7 +48,7 @@ const typeDefs = gql`
 
   type Query {
     pageCount: Int!
-    findPage(month: Int!, dayNum: Int!, year: Int!): Page
+    findPage(month: Int, dayNum: Int, year: Int, id: String): Page
     getAvailablePages: [ID]
   }
 
@@ -61,13 +61,21 @@ const resolvers = {
   Query: {
     pageCount: () => pages.length,
     findPage: (root, args) => {
-      const { month, dayNum, year } = args;
-      return pages.find(
-        (page) =>
-          page.date.month === month &&
-          page.date.day.number === dayNum &&
-          page.date.year === year
-      );
+      console.log(args);
+      // find by id or by date
+      if (args.id) {
+        // return pages.find((page) => page.id === args.id);
+        const page = pages.find((page) => page.id === args.id);
+        console.log(page);
+        return page;
+      } else {
+        return pages.find(
+          (page) =>
+            page.date.month === args.month &&
+            page.date.day.number === args.dayNum &&
+            page.date.year === args.year
+        );
+      }
     },
     getAvailablePages: () => {
       return pages.map((page) => page.id);
