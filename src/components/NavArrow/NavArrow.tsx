@@ -6,6 +6,7 @@ import { GET_AVAILABLE_PAGES, FIND_PAGE } from "../../utils/queries";
 import { useDispatch, useSelector } from "react-redux";
 // @ts-ignore
 import { setCurrentPage } from "../../reducers/PageReducer";
+import { getFormattedDate } from "../../utils/getFormattedDate";
 
 interface NavArrowProps {}
 
@@ -14,6 +15,7 @@ export const NavArrow: FC<NavArrowProps> = () => {
 
   const availablePages = useQuery(GET_AVAILABLE_PAGES);
   const currentPage = useSelector((state: any) => state.currentPage);
+  const today = getFormattedDate();
 
   const [prevPageId, setPrevPageId] = useState<string | null>(null);
   const [nextPageId, setNextPageId] = useState<string | null>(null);
@@ -60,6 +62,20 @@ export const NavArrow: FC<NavArrowProps> = () => {
         style={{ display: prevPageId === null ? "none" : "" }}
       >
         to prev page
+      </button>
+      <button
+        onClick={() =>
+          changePage({
+            variables: {
+              month: today.month,
+              year: today.year,
+              dayName: today.day.name,
+              dayNum: today.day.number,
+            },
+          })
+        }
+      >
+        to today
       </button>
       <button
         onClick={() => changePage({ variables: { id: nextPageId } })}
