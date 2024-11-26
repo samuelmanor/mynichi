@@ -17,6 +17,8 @@ export const formatMonth = (date: FormattedDate): number[][] => {
   const daysInMonth = new Date(year, month, 0).getDate();
   console.log(firstDayPosition, daysInMonth);
 
+  const weeksInMonth = Math.ceil((daysInMonth + firstDayPosition) / 7);
+
   // example of what the array should look like:
   // [
   //   [0, 0, 0, 0, 0, 1, 2],
@@ -43,14 +45,13 @@ export const formatMonth = (date: FormattedDate): number[][] => {
     }
   }
 
-  // // fill in the last week with 0s until the end of the week
-  // while (weekArray.length < 7 && weekArray.length !== 0) {
-  //   weekArray.push(0);
-  // }
+  // fill in the last week with 0s until the end of the week, if necessary
+  if (monthArray.length < weeksInMonth) {
+    while (weekArray.length < 7) {
+      weekArray.push(0);
+    }
+    monthArray.push(weekArray);
+  }
 
-  monthArray.push(weekArray);
-
-  console.log(monthArray);
-
-  return [[]];
+  return monthArray;
 };
