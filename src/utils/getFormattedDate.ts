@@ -1,4 +1,4 @@
-export type Date = {
+export type FormattedDate = {
   month: number;
   day: {
     number: number;
@@ -11,7 +11,7 @@ export type Date = {
  * Returns the current date in the format of the Date type.
  * @returns {Date} The current date.
  */
-export const getFormattedDate = (): Date => {
+export const getFormattedDate = (): FormattedDate => {
   return {
     day: {
       number: new Date().getDate(),

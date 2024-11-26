@@ -6,6 +6,7 @@ import { setCurrentPage } from "./reducers/PageReducer";
 import { getFormattedDate } from "./utils/getFormattedDate";
 import { useMutation } from "@apollo/client";
 import { ADD_PAGE, GET_PAGE_COUNT, GET_AVAILABLE_PAGES } from "./utils/queries";
+import { formatMonth } from "./utils/formatMonth";
 
 function App() {
   const dispatch = useDispatch();
@@ -39,6 +40,7 @@ function App() {
     <div>
       <Page />
       <NavArrow />
+      <button onClick={() => formatMonth(today)}>formatmonth</button>
     </div>
   );
 }
