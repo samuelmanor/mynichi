@@ -28,17 +28,16 @@ export const GET_AVAILABLE_PAGES = gql`
   }
 `;
 
+/**
+ * Searches for an existing page with today's date, and if it doesn't exist, creates a new page with that date.
+ */
 export const ADD_PAGE = gql`
-  mutation addPage(
-    $month: Int!
-    $dayName: String!
-    $dayNum: Int!
-    $year: Int!
-  ) {
-    addPage(month: $month, dayName: $dayName, dayNum: $dayNum, year: $year) {
+  mutation addPage {
+    addPage {
       id
       date {
         month
+        week
         day {
           number
           name

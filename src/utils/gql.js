@@ -9,6 +9,7 @@ let pages = [
     id: "1",
     date: {
       month: 11,
+      week: 3,
       day: {
         number: 11,
         name: "mon",
@@ -17,11 +18,12 @@ let pages = [
     },
   },
   {
-    id: "2",
+    id: "603bef20-ab62-11ef-9d82-9fc91bb95cd1",
     date: {
       month: 11,
+      week: 5,
       day: {
-        number: 18,
+        number: 25,
         name: "mon",
       },
       year: 2024,
@@ -37,6 +39,7 @@ const typeDefs = gql`
 
   type Date {
     month: Int!
+    week: Int!
     day: Day!
     year: Int!
   }
@@ -53,7 +56,7 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    addPage(month: Int!, dayName: String!, dayNum: Int!, year: Int!): Page
+    addPage: Page
   }
 `;
 
@@ -62,11 +65,8 @@ const resolvers = {
     pageCount: () => pages.length,
     findPage: (root, args) => {
       console.log(args);
-      // find by id or by date
       if (args.id) {
-        // return pages.find((page) => page.id === args.id);
         const page = pages.find((page) => page.id === args.id);
-        console.log(page);
         return page;
       } else {
         return pages.find(
@@ -83,11 +83,23 @@ const resolvers = {
   },
   Mutation: {
     addPage: (root, args) => {
+      const date = new Date();
+      const today = {
+        day: {
+          number: date.getDate(),
+          name: date.toDateString().split(" ")[0].toLowerCase(),
+        },
+        month: date.getMonth() + 1,
+        week: Math.floor((date.getDate() + date.getDay()) / 7) + 1,
+        year: date.getFullYear(),
+      };
+
       const pageAlreadyExists = pages.find((p) => {
         return (
-          p.date.month === args.month &&
-          p.date.day.number === args.dayNum &&
-          p.date.year === args.year
+          p.date.month === today.month &&
+          p.date.day.number === today.day.number &&
+          p.date.week === today.week &&
+          p.date.year === today.year
         );
       });
 
@@ -96,16 +108,8 @@ const resolvers = {
       } else {
         const newPage = {
           id: uuid(),
-          date: {
-            month: args.month,
-            day: {
-              name: args.dayName,
-              number: args.dayNum,
-            },
-            year: args.year,
-          },
+          date: today,
         };
-
         pages.push(newPage);
         return newPage;
       }

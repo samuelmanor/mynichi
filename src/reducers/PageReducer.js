@@ -1,19 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getFormattedDate } from "../utils/getFormattedDate";
-import { useQuery } from "@apollo/client";
-import { FIND_PAGE } from "../utils/queries";
-
-// const initialState = {
-//   id: 0,
-//   date: {
-//     month: 0,
-//     day: {
-//       number: 0,
-//       name: "",
-//     },
-//     year: 0,
-//   },
-// };
 
 const pageSlice = createSlice({
   name: "pages",
@@ -25,6 +10,7 @@ const pageSlice = createSlice({
           name: "",
           number: 0,
         },
+        week: 0,
         month: 0,
         year: 0,
       },
@@ -40,13 +26,13 @@ const pageSlice = createSlice({
           name: action.payload.date.day.name,
           number: action.payload.date.day.number,
         },
+        week: action.payload.date.week,
         month: action.payload.date.month,
         year: action.payload.date.year,
       };
     },
   },
   setPageCount(state, action) {
-    // state.pageCount = action.payload;
     state.pageCount = action.payload;
   },
 });

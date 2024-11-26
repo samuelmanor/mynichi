@@ -1,5 +1,6 @@
 export type FormattedDate = {
   month: number;
+  week: number;
   day: {
     number: number;
     name: string;
@@ -8,16 +9,32 @@ export type FormattedDate = {
 };
 
 /**
- * Returns the current date in the format of the Date type.
- * @returns {Date} The current date.
+ * Returns the current date in the format of the FormattedDate type.
+ * @returns { FormattedDate } The current date.
+ * @example
+ * ```
+ * const date = getFormattedDate();
+ * console.log(date);
+ * // {
+ * //   month: 11,
+ * //   week: 5,
+ * //   day: {
+ * //     number: 26,
+ * //     name: "tue"
+ * //   },
+ * //   year: 2024
+ * // }
+ * ```
  */
 export const getFormattedDate = (): FormattedDate => {
+  const today = new Date();
   return {
     day: {
-      number: new Date().getDate(),
-      name: new Date().toDateString().split(" ")[0].toLowerCase(),
+      number: today.getDate(),
+      name: today.toDateString().split(" ")[0].toLowerCase(),
     },
-    month: new Date().getMonth() + 1,
-    year: new Date().getFullYear(),
+    month: today.getMonth() + 1,
+    year: today.getFullYear(),
+    week: Math.floor((today.getDate() + today.getDay()) / 7) + 1,
   };
 };
