@@ -1,11 +1,3 @@
-// const config = require("./utils/config");
-// const express = require("express");
-// const app = express();
-// const cors = require("cors");
-// const pageRouter = require("./controllers/pages");
-// const middleware = require("./utils/middleware");
-// const logger = require("./utils/logger");
-
 const { ApolloServer } = require("@apollo/server");
 require("dotenv").config();
 const { startStandaloneServer } = require("@apollo/server/standalone");
@@ -110,18 +102,6 @@ const resolvers = {
     // },
   },
 };
-
-// app.use(cors());
-// app.use(express.static("dist"));
-// app.use(express.json());
-// app.use(middleware.requestLogger);
-
-// app.use("/api/pages", pageRouter);
-
-// app.use(middleware.unknownEndpoint);
-// app.use(middleware.errorHandler);
-
-// module.exports = app;
 
 const server = new ApolloServer({
   typeDefs,
