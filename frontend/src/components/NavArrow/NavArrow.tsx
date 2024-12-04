@@ -11,53 +11,53 @@ import { getFormattedDate } from "../../utils/getFormattedDate";
 interface NavArrowProps {}
 
 export const NavArrow: FC<NavArrowProps> = () => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
-  const availablePages = useQuery(GET_AVAILABLE_PAGES);
-  const currentPage = useSelector((state: any) => state.currentPage);
-  const today = getFormattedDate();
+  // const availablePages = useQuery(GET_AVAILABLE_PAGES);
+  // const currentPage = useSelector((state: any) => state.currentPage);
+  // const today = getFormattedDate();
 
-  const [prevPageId, setPrevPageId] = useState<string | null>(null);
-  const [nextPageId, setNextPageId] = useState<string | null>(null);
+  // const [prevPageId, setPrevPageId] = useState<string | null>(null);
+  // const [nextPageId, setNextPageId] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (availablePages.data) {
-      // find index of the current page within the available pages
-      const currentPageIndex = availablePages.data.getAvailablePages.findIndex(
-        (id: string) => id === currentPage.id
-      );
-      // if currentPageIndex is found, set the prevPageIndex and nextPageIndex
-      if (currentPageIndex !== -1) {
-        if (currentPageIndex > 0) {
-          setPrevPageId(
-            availablePages.data.getAvailablePages[currentPageIndex - 1]
-          );
-        } else {
-          setPrevPageId(null);
-        }
-        if (
-          currentPageIndex <
-          availablePages.data.getAvailablePages.length - 1
-        ) {
-          setNextPageId(
-            availablePages.data.getAvailablePages[currentPageIndex + 1]
-          );
-        } else {
-          setNextPageId(null);
-        }
-      }
-    }
-  }, [availablePages.data, currentPage.id]);
+  // useEffect(() => {
+  //   // if (availablePages.data) {
+  //   //   // find index of the current page within the available pages
+  //   //   const currentPageIndex = availablePages.data.getAvailablePages.findIndex(
+  //   //     (id: string) => id === currentPage.id
+  //   //   );
+  //   //   // if currentPageIndex is found, set the prevPageIndex and nextPageIndex
+  //   //   if (currentPageIndex !== -1) {
+  //   //     if (currentPageIndex > 0) {
+  //   //       setPrevPageId(
+  //   //         availablePages.data.getAvailablePages[currentPageIndex - 1]
+  //   //       );
+  //   //     } else {
+  //   //       setPrevPageId(null);
+  //   //     }
+  //   //     if (
+  //   //       currentPageIndex <
+  //   //       availablePages.data.getAvailablePages.length - 1
+  //   //     ) {
+  //   //       setNextPageId(
+  //   //         availablePages.data.getAvailablePages[currentPageIndex + 1]
+  //   //       );
+  //   //     } else {
+  //   //       setNextPageId(null);
+  //   //     }
+  //   //   }
+  //   // }
+  // }, [currentPage.id]);
 
-  const [changePage] = useLazyQuery(FIND_PAGE, {
-    onCompleted: (data) => {
-      dispatch(setCurrentPage(data.findPage));
-    },
-  });
+  // const [changePage] = useLazyQuery(FIND_PAGE, {
+  //   // onCompleted: (data) => {
+  //   //   dispatch(setCurrentPage(data.findPage));
+  //   // },
+  // });
 
   return (
     <div>
-      <button
+      {/* <button
         onClick={() => changePage({ variables: { id: prevPageId } })}
         style={{ display: prevPageId === null ? "none" : "" }}
       >
@@ -82,7 +82,8 @@ export const NavArrow: FC<NavArrowProps> = () => {
         style={{ display: nextPageId === null ? "none" : "" }}
       >
         to next page
-      </button>
+      </button> */}
+      navarrow
     </div>
   );
 };

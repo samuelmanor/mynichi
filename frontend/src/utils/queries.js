@@ -22,12 +22,6 @@ export const GET_PAGE_COUNT = gql`
   }
 `;
 
-export const GET_AVAILABLE_PAGES = gql`
-  query {
-    getAvailablePages
-  }
-`;
-
 /**
  * Searches for an existing page with today's date, and if it doesn't exist, creates a new page with that date.
  */

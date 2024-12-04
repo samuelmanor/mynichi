@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 mongoose.set("strictQuery", false);
 
 const Page = require("./models/page");
+const { GraphQLError } = require("graphql");
 
 console.log("connecting to", process.env.MONGODB_URI);
 
@@ -113,12 +114,56 @@ const resolvers = {
     //     return newPage;
     //   }
     // },
+    addPage: async (root, args) => {
+      const date = new Date();
+      Date.prototype.getWeekOfMonth = function () {
+        var firstWeekday = new Date(
+          this.getFullYear(),
+          this.getMonth(),
+          1
+        ).getDay();
+        var offsetDate = this.getDate() + firstWeekday - 1;
+        return Math.floor(offsetDate / 7) + 1;
+      };
+
+      const today = {
+        day: {
+          number: date.getDate(),
+          name: date.toDateString().split(" ")[0].toLowerCase(),
+        },
+        month: date.getMonth() + 1,
+        year: date.getFullYear(),
+        week: date.getWeekOfMonth(),
+      };
+
+      const pageAlreadyExists = await Page.findOne({
+        "date.month": today.month,
+        "date.day.number": today.day.number,
+        "date.year": today.year,
+      });
+
+      if (pageAlreadyExists) {
+        return pageAlreadyExists;
+      } else {
+        const newPage = new Page({
+          date: today,
+        });
+        const savedPage = await newPage.save();
+        return savedPage;
+      }
+    },
   },
+};
+
+const corsOptions = {
+  origin: "http://localhost:3000",
+  credentials: true,
 };
 
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  cors: corsOptions,
 });
 
 startStandaloneServer(server, {
