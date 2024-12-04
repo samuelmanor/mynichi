@@ -65,6 +65,19 @@ const resolvers = {
     //     );
     //   }
     // },
+    findPage: async (root, args) => {
+      if (args.id) {
+        const page = await Page.findById(args.id);
+        return page;
+      } else {
+        const page = await Page.findOne({
+          "date.month": args.month,
+          "date.day.number": args.dayNum,
+          "date.year": args.year,
+        });
+        return page;
+      }
+    },
     // getAvailablePages: () => {
     //   return pages.map((page) => page.id);
     // },
