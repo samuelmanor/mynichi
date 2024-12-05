@@ -25,6 +25,18 @@ const pageSchema = new mongoose.Schema({
       required: true,
     },
   },
+  habits: [
+    {
+      name: {
+        type: String,
+        required: true,
+      },
+      completed: {
+        type: Boolean,
+        required: true,
+      },
+    },
+  ],
 });
 
 pageSchema.set("toJSON", {
