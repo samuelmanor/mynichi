@@ -7,15 +7,15 @@ import { FormattedDate } from "./getFormattedDate";
  * @param {FormattedDate} date The date to format.
  * @returns {number[][]} A 2d array of the month's days.
  */
-export const formatMonth = (date: FormattedDate): number[][] => {
-  console.log(date);
-  const month = date.month;
-  const year = date.year;
+export const formatMonth = (month: number, year: number): number[][] => {
+  // console.log(date);
+  // const month = date.month;
+  // const year = date.year;
   /** The day of the week that the first day of the month falls on. 0 is Sunday, 6 is Saturday. */
   const firstDayPosition = new Date(year, month - 1, 1).getDay();
   /** The total number of days in the given month. */
   const daysInMonth = new Date(year, month, 0).getDate();
-  console.log(firstDayPosition, daysInMonth);
+  // console.log(firstDayPosition, daysInMonth);
 
   const weeksInMonth = Math.ceil((daysInMonth + firstDayPosition) / 7);
 

@@ -32,9 +32,15 @@ const typeDefs = `
     year: Int!
   }
 
+  type Habit {
+    name: String!
+    completed: Boolean!
+  }
+
   type Page {
     id: ID!
     date: Date!
+    habits: [Habit]
   }
 
   type PageInfo {
@@ -53,6 +59,8 @@ const typeDefs = `
     addPage: Page
   }
 `;
+
+// getWeeklyHabits: [Object][]
 
 const resolvers = {
   Query: {
@@ -100,6 +108,7 @@ const resolvers = {
         return { page: null, isEnd: true };
       }
     },
+    // getWeeklyHabits: async (root, args) => {},
   },
   Mutation: {
     addPage: async (root, args) => {
@@ -132,13 +141,32 @@ const resolvers = {
 
       if (pageAlreadyExists) {
         return pageAlreadyExists;
-      } else {
-        const newPage = new Page({
-          date: today,
-        });
-        const savedPage = await newPage.save();
-        return savedPage;
       }
+
+      // if a page in the current week exists, adopt its habits; else, use blank ones
+      const habits = await Page.findOne({
+        "date.month": today.month,
+        "date.week": today.week,
+        "date.year": today.year,
+      }).then((page) => {
+        if (page) {
+          return page.habits;
+        } else {
+          return [
+            { name: "", completed: false },
+            { name: "", completed: false },
+            { name: "", completed: false },
+            { name: "", completed: false },
+          ];
+        }
+      });
+
+      const newPage = new Page({
+        date: today,
+        habits,
+      });
+      const savedPage = await newPage.save();
+      return savedPage;
     },
   },
 };

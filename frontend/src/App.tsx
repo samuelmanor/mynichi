@@ -28,8 +28,8 @@ function App() {
 
   return (
     <div>
-      <Page />
       <NavArrow />
+      <Page />
     </div>
   );
 }

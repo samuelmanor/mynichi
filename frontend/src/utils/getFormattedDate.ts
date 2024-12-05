@@ -26,8 +26,21 @@ export type FormattedDate = {
  * // }
  * ```
  */
+declare global {
+  interface Date {
+    getWeekOfMonth(): number;
+  }
+}
+
+Date.prototype.getWeekOfMonth = function (): number {
+  var firstWeekday = new Date(this.getFullYear(), this.getMonth(), 1).getDay();
+  var offsetDate = this.getDate() + firstWeekday - 1;
+  return Math.floor(offsetDate / 7) + 1;
+};
+
 export const getFormattedDate = (): FormattedDate => {
   const today = new Date();
+
   return {
     day: {
       number: today.getDate(),
@@ -35,6 +48,6 @@ export const getFormattedDate = (): FormattedDate => {
     },
     month: today.getMonth() + 1,
     year: today.getFullYear(),
-    week: Math.floor((today.getDate() + today.getDay()) / 7) + 1,
+    week: today.getWeekOfMonth(),
   };
 };
