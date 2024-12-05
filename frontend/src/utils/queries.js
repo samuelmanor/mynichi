@@ -10,6 +10,7 @@ export const FIND_PAGE = gql`
           number
           name
         }
+        week
         year
       }
     }
