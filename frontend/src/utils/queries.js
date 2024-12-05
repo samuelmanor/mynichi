@@ -1,18 +1,22 @@
 import { gql } from "@apollo/client";
 
+const entirePage = `
+  id
+  date {
+    month
+    day {
+      number
+      name
+    }
+    week
+    year
+  }
+`;
+
 export const FIND_PAGE = gql`
   query findPage($month: Int, $dayNum: Int, $year: Int, $id: String) {
     findPage(month: $month, dayNum: $dayNum, year: $year, id: $id) {
-      id
-      date {
-        month
-        day {
-          number
-          name
-        }
-        week
-        year
-      }
+      ${entirePage}
     }
   }
 `;
@@ -29,16 +33,35 @@ export const GET_PAGE_COUNT = gql`
 export const ADD_PAGE = gql`
   mutation addPage {
     addPage {
-      id
-      date {
-        month
-        week
-        day {
-          number
-          name
-        }
-        year
+      ${entirePage}
+    }
+  }
+`;
+
+/**
+ * Searches for the pave saved previous to the one with the given id.
+ */
+export const GET_PREVIOUS_PAGE = gql`
+  query getPreviousPage($id: String!) {
+    getPreviousPage(id: $id) {
+      page {
+        ${entirePage}
       }
+      isEnd
+    }
+  }
+`;
+
+/**
+ * Searches for the page saved after the one with the given id.
+ */
+export const GET_NEXT_PAGE = gql`
+  query getNextPage($id: String!) {
+    getNextPage(id: $id) {
+      page {
+        ${entirePage}
+      }
+      isEnd
     }
   }
 `;

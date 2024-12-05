@@ -37,10 +37,16 @@ const typeDefs = `
     date: Date!
   }
 
+  type PageInfo {
+    page: Page
+    isEnd: Boolean
+  }
+
   type Query {
     pageCount: Int!
     findPage(month: Int, dayNum: Int, year: Int, id: String): Page
-    getAvailablePages: [ID]
+    getPreviousPage(id: String!): PageInfo
+    getNextPage(id: String!): PageInfo
   }
 
   type Mutation {
@@ -51,21 +57,6 @@ const typeDefs = `
 const resolvers = {
   Query: {
     pageCount: () => Page.collection.countDocuments(),
-    // pageCount: () => pages.length,
-    // findPage: (root, args) => {
-    //   console.log(args);
-    //   if (args.id) {
-    //     const page = pages.find((page) => page.id === args.id);
-    //     return page;
-    //   } else {
-    //     return pages.find(
-    //       (page) =>
-    //         page.date.month === args.month &&
-    //         page.date.day.number === args.dayNum &&
-    //         page.date.year === args.year
-    //     );
-    //   }
-    // },
     findPage: async (root, args) => {
       if (args.id) {
         const page = await Page.findById(args.id);
@@ -79,41 +70,38 @@ const resolvers = {
         return page;
       }
     },
-    // getAvailablePages: () => {
-    //   return pages.map((page) => page.id);
-    // },
+    getPreviousPage: async (root, args) => {
+      const previousPage = await Page.findOne({
+        _id: { $lt: args.id },
+      })
+        .sort({ _id: -1 })
+        .limit(1);
+
+      if (previousPage) {
+        const firstPage = await Page.findOne().sort({ _id: 1 }).limit(1);
+        const isEnd = previousPage.id === firstPage.id;
+        return { page: previousPage, isEnd };
+      } else {
+        return { page: null, isEnd: true };
+      }
+    },
+    getNextPage: async (root, args) => {
+      const nextPage = await Page.findOne({
+        _id: { $gt: args.id },
+      })
+        .sort({ _id: 1 })
+        .limit(1);
+
+      if (nextPage) {
+        const lastPage = await Page.findOne().sort({ _id: -1 }).limit(1);
+        const isEnd = nextPage.id === lastPage.id;
+        return { page: nextPage, isEnd };
+      } else {
+        return { page: null, isEnd: true };
+      }
+    },
   },
   Mutation: {
-    // addPage: (root, args) => {
-    //   const date = new Date();
-    //   const today = {
-    //     day: {
-    //       number: date.getDate(),
-    //       name: date.toDateString().split(" ")[0].toLowerCase(),
-    //     },
-    //     month: date.getMonth() + 1,
-    //     week: Math.floor((date.getDate() + date.getDay()) / 7) + 1,
-    //     year: date.getFullYear(),
-    //   };
-    //   const pageAlreadyExists = pages.find((p) => {
-    //     return (
-    //       p.date.month === today.month &&
-    //       p.date.day.number === today.day.number &&
-    //       p.date.week === today.week &&
-    //       p.date.year === today.year
-    //     );
-    //   });
-    //   if (pageAlreadyExists) {
-    //     return pageAlreadyExists;
-    //   } else {
-    //     const newPage = {
-    //       id: uuid(),
-    //       date: today,
-    //     };
-    //     pages.push(newPage);
-    //     return newPage;
-    //   }
-    // },
     addPage: async (root, args) => {
       const date = new Date();
       Date.prototype.getWeekOfMonth = function () {
