@@ -11,6 +11,10 @@ const entirePage = `
     week
     year
   }
+  habits {
+    name
+    completed
+  }
 `;
 
 export const FIND_PAGE = gql`

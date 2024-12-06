@@ -16,6 +16,7 @@ const pageSlice = createSlice({
       },
     },
     pageCount: 0,
+    habits: [],
   },
   reducers: {
     setCurrentPage(state, action) {
@@ -30,6 +31,7 @@ const pageSlice = createSlice({
         month: action.payload.date.month,
         year: action.payload.date.year,
       };
+      state.habits = action.payload.habits;
     },
     setPageCount(state, action) {
       state.pageCount = action.payload;

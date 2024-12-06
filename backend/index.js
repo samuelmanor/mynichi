@@ -150,7 +150,9 @@ const resolvers = {
         "date.year": today.year,
       }).then((page) => {
         if (page) {
-          return page.habits;
+          return page.habits.map((habit) => {
+            return { name: habit.name, completed: false };
+          });
         } else {
           return [
             { name: "", completed: false },
