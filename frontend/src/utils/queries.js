@@ -40,6 +40,7 @@ export const ADD_PAGE = gql`
 
 /**
  * Searches for the pave saved previous to the one with the given id.
+ * @param {String} id The id of the page.
  */
 export const GET_PREVIOUS_PAGE = gql`
   query getPreviousPage($id: String!) {
@@ -54,6 +55,7 @@ export const GET_PREVIOUS_PAGE = gql`
 
 /**
  * Searches for the page saved after the one with the given id.
+ * @param {String} id The id of the page.
  */
 export const GET_NEXT_PAGE = gql`
   query getNextPage($id: String!) {
@@ -62,6 +64,21 @@ export const GET_NEXT_PAGE = gql`
         ${entirePage}
       }
       isEnd
+    }
+  }
+`;
+
+/**
+ * Searches for the habits for the given week.
+ * @param {Number} week
+ * @param {Number} month
+ * @param {Number} year
+ */
+export const GET_WEEKLY_HABITS = gql`
+  query getWeeklyHabits($week: Int!, $month: Int!, $year: Int!) {
+    getWeeklyHabits(week: $week, month: $month, year: $year) {
+      name
+      completed
     }
   }
 `;

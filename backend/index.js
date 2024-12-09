@@ -53,14 +53,13 @@ const typeDefs = `
     findPage(month: Int, dayNum: Int, year: Int, id: String): Page
     getPreviousPage(id: String!): PageInfo
     getNextPage(id: String!): PageInfo
+    getWeeklyHabits(week: Int!, month: Int!, year: Int!): [[Habit]]
   }
 
   type Mutation {
     addPage: Page
   }
 `;
-
-// getWeeklyHabits: [Object][]
 
 const resolvers = {
   Query: {
@@ -108,7 +107,22 @@ const resolvers = {
         return { page: null, isEnd: true };
       }
     },
-    // getWeeklyHabits: async (root, args) => {},
+    getWeeklyHabits: async (root, args) => {
+      const habits = await Page.find({
+        "date.month": args.month,
+        "date.week": args.week,
+        "date.year": args.year,
+      }).then((pages) => {
+        // example return value: [[{name: "habit1", completed: true}, {name: "habit2", completed: false}], [{name: "habit1", completed: true}, {name: "habit2", completed: false}]]
+        return pages.map((page) => page.habits);
+      });
+
+      if (habits) {
+        return habits;
+      } else {
+        throw new GraphQLError("No habits found for the week");
+      }
+    },
   },
   Mutation: {
     addPage: async (root, args) => {
