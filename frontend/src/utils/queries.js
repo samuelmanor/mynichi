@@ -77,8 +77,11 @@ export const GET_NEXT_PAGE = gql`
 export const GET_WEEKLY_HABITS = gql`
   query getWeeklyHabits($week: Int!, $month: Int!, $year: Int!) {
     getWeeklyHabits(week: $week, month: $month, year: $year) {
-      name
-      completed
+      day
+      habits {
+        name
+        completed
+      }
     }
   }
 `;

@@ -48,12 +48,17 @@ const typeDefs = `
     isEnd: Boolean
   }
 
+  type WeeklyHabits {
+    day: Int!
+    habits: [Habit]
+  }
+
   type Query {
     pageCount: Int!
     findPage(month: Int, dayNum: Int, year: Int, id: String): Page
     getPreviousPage(id: String!): PageInfo
     getNextPage(id: String!): PageInfo
-    getWeeklyHabits(week: Int!, month: Int!, year: Int!): [[Habit]]
+    getWeeklyHabits(week: Int!, month: Int!, year: Int!): [WeeklyHabits]
   }
 
   type Mutation {
@@ -113,8 +118,14 @@ const resolvers = {
         "date.week": args.week,
         "date.year": args.year,
       }).then((pages) => {
-        // example return value: [[{name: "habit1", completed: true}, {name: "habit2", completed: false}], [{name: "habit1", completed: true}, {name: "habit2", completed: false}]]
-        return pages.map((page) => page.habits);
+        const weeklyHabits = pages.map((page) => {
+          return {
+            day: page.date.day.number,
+            habits: page.habits,
+          };
+        });
+
+        return weeklyHabits;
       });
 
       if (habits) {
