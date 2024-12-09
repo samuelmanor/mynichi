@@ -143,30 +143,27 @@ const resolvers = {
         return pageAlreadyExists;
       }
 
-      // if a page in the current week exists, adopt its habits; else, use blank ones
-      const habits = await Page.findOne({
-        "date.month": today.month,
-        "date.week": today.week,
-        "date.year": today.year,
-      }).then((page) => {
-        if (page) {
-          return page.habits.map((habit) => {
-            return { name: habit.name, completed: false };
-          });
-        } else {
-          return [
-            { name: "", completed: false },
-            { name: "", completed: false },
-            { name: "", completed: false },
-            { name: "", completed: false },
+      // if a previous page exists, copy its habits
+      const previousPage = await Page.findOne({
+        _id: { $lt: args.id },
+      })
+        .sort({ _id: -1 })
+        .limit(1);
+
+      const habits = previousPage
+        ? previousPage.habits.map((habit) => ({ ...habit, completed: false }))
+        : [
+            { name: "blank", completed: false },
+            { name: "blank", completed: false },
+            { name: "blank", completed: false },
+            { name: "blank", completed: false },
           ];
-        }
-      });
 
       const newPage = new Page({
         date: today,
         habits,
       });
+
       const savedPage = await newPage.save();
       return savedPage;
     },
