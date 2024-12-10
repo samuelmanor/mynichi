@@ -72,9 +72,9 @@ if (container) {
   root.render(
     <ApolloProvider client={client}>
       <Provider store={store}>
-        <React.StrictMode>
-          <App />
-        </React.StrictMode>
+        {/* <React.StrictMode> */}
+        <App />
+        {/* </React.StrictMode> */}
       </Provider>
     </ApolloProvider>
   );

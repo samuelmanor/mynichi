@@ -171,14 +171,13 @@ const resolvers = {
       }
 
       // if a previous page exists, copy its habits
-      const previousPage = await Page.findOne({
-        _id: { $lt: args.id },
-      })
-        .sort({ _id: -1 })
-        .limit(1);
+      const previousPage = await Page.findOne().sort({ _id: -1 }).limit(1);
 
       const habits = previousPage
-        ? previousPage.habits.map((habit) => ({ ...habit, completed: false }))
+        ? previousPage.habits.map((habit) => ({
+            name: habit.name,
+            completed: false,
+          }))
         : [
             { name: "blank", completed: false },
             { name: "blank", completed: false },
