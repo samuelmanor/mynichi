@@ -79,9 +79,37 @@ export const GET_WEEKLY_HABITS = gql`
     getWeeklyHabits(week: $week, month: $month, year: $year) {
       day
       habits {
+        id
         name
         completed
       }
+    }
+  }
+`;
+
+/**
+ * Updates the habit with the given id.
+ * @param {String} pageId The id of the page.
+ * @param {String} habitId The id of the habit.
+ * @param {String} name The name of the habit.
+ * @param {Boolean} completed Whether the habit is completed.
+ */
+export const UPDATE_HABIT = gql`
+  mutation updateHabit(
+    $pageId: ID!
+    $habitId: ID!
+    $name: String!
+    $completed: Boolean!
+  ) {
+    updateHabit(
+      pageId: $pageId
+      habitId: $habitId
+      name: $name
+      completed: $completed
+    ) {
+      id
+      name
+      completed
     }
   }
 `;

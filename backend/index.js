@@ -33,6 +33,7 @@ const typeDefs = `
   }
 
   type Habit {
+    id: ID!
     name: String!
     completed: Boolean!
   }
@@ -63,6 +64,7 @@ const typeDefs = `
 
   type Mutation {
     addPage: Page
+    updateHabit(pageId: ID!, habitId: ID!, name: String!, completed: Boolean!): Habit
   }
 `;
 
@@ -191,6 +193,14 @@ const resolvers = {
 
       const savedPage = await newPage.save();
       return savedPage;
+    },
+    updateHabit: async (root, args) => {
+      const page = await Page.findById(args.pageId);
+      const habit = page.habits.filter((habit) => habit.id === args.habitId)[0];
+      habit.name = args.name;
+      habit.completed = args.completed;
+      await page.save();
+      return habit;
     },
   },
 };
