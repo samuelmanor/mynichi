@@ -60,11 +60,12 @@ const typeDefs = `
     getPreviousPage(id: String!): PageInfo
     getNextPage(id: String!): PageInfo
     getWeeklyHabits(week: Int!, month: Int!, year: Int!): [WeeklyHabits]
+    getHabitNames(week: Int!, month: Int!, year: Int!): [String]
   }
 
   type Mutation {
     addPage: Page
-    updateHabit(pageId: ID!, habitId: ID!, name: String!, completed: Boolean!): Habit
+    updateHabit(pageId: ID!, habitId: ID!, name: String, completed: Boolean): Habit
   }
 `;
 
@@ -136,6 +137,25 @@ const resolvers = {
         throw new GraphQLError("No habits found for the week");
       }
     },
+    getHabitNames: async (root, args) => {
+      const habits = await Page.find({
+        "date.month": args.month,
+        "date.week": args.week,
+        "date.year": args.year,
+      }).then((pages) => {
+        const habitNames = pages.map((page) => {
+          return page.habits.map((habit) => habit.name);
+        });
+
+        return habitNames.flat().slice(0, 4);
+      });
+
+      if (habits) {
+        return habits;
+      } else {
+        throw new GraphQLError("No habits found for the week");
+      }
+    },
   },
   Mutation: {
     addPage: async (root, args) => {
@@ -194,10 +214,21 @@ const resolvers = {
       return savedPage;
     },
     updateHabit: async (root, args) => {
+      if (args.name === undefined && args.completed === undefined) {
+        throw new GraphQLError("No data to update");
+      }
+
       const page = await Page.findById(args.pageId);
       const habit = page.habits.filter((habit) => habit.id === args.habitId)[0];
-      habit.name = args.name;
-      habit.completed = args.completed;
+
+      if (args.name !== undefined) {
+        habit.name = args.name;
+      }
+
+      if (args.completed !== undefined) {
+        habit.completed = args.completed;
+      }
+
       await page.save();
       return habit;
     },

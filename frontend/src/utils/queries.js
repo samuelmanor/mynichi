@@ -80,10 +80,16 @@ export const GET_WEEKLY_HABITS = gql`
       day
       habits {
         id
-        name
         completed
+        name
       }
     }
+  }
+`;
+
+export const GET_HABIT_NAMES = gql`
+  query getHabitNames($week: Int!, $month: Int!, $year: Int!) {
+    getHabitNames(week: $week, month: $month, year: $year)
   }
 `;
 
@@ -98,8 +104,8 @@ export const UPDATE_HABIT = gql`
   mutation updateHabit(
     $pageId: ID!
     $habitId: ID!
-    $name: String!
-    $completed: Boolean!
+    $name: String
+    $completed: Boolean
   ) {
     updateHabit(
       pageId: $pageId

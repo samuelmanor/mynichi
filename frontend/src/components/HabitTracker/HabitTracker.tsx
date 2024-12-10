@@ -3,6 +3,8 @@ import { formatMonth } from "../../utils/formatMonth";
 import { useSelector } from "react-redux";
 // @ts-ignore
 import { GET_WEEKLY_HABITS, UPDATE_HABIT } from "../../utils/queries";
+// @ts-ignore
+import { GET_HABIT_NAMES } from "../../utils/queries";
 import { useMutation, useQuery } from "@apollo/client";
 import { DailyHabitsColumn } from "./DailyHabitsColumn";
 
@@ -24,17 +26,13 @@ export const HabitTracker: FC<HabitTrackerProps> = () => {
     },
   });
 
-  interface HabitNameProps {
-    name: string;
-  }
-
-  const HabitName: FC<HabitNameProps> = ({ name }) => {
-    return (
-      <div>
-        <p>{name}</p>
-      </div>
-    );
-  };
+  const habitNames = useQuery(GET_HABIT_NAMES, {
+    variables: {
+      month: currentPage.date.month,
+      year: currentPage.date.year,
+      week: currentPage.date.week,
+    },
+  });
 
   return (
     <div>
@@ -43,16 +41,22 @@ export const HabitTracker: FC<HabitTrackerProps> = () => {
       <button onClick={() => console.log(habits.data.getWeeklyHabits)}>
         cl habits
       </button>
+      <div onClick={() => console.log(habitNames.data.getHabitNames)}>
+        cl habit names
+      </div>
       {currentWeek?.map((day, i) => (
         <DailyHabitsColumn
           key={i}
           dayNum={day.toString()}
           habits={
             habits?.data?.getWeeklyHabits?.filter(
-              (habit: any) => habit.day === day
+              (habit: { day: number; habit: object }) => habit.day === day
             )[0]?.habits
           }
         />
+      ))}
+      {habitNames?.data?.getHabitNames?.map((name: string, i: number) => (
+        <div key={`habit-${name}${i}`}>{name}</div>
       ))}
     </div>
   );

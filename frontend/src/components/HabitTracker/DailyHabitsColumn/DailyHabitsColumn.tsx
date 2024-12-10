@@ -2,15 +2,21 @@ import { useMutation } from "@apollo/client";
 import { FC } from "react";
 import { useSelector } from "react-redux";
 // @ts-ignore
-import { GET_WEEKLY_HABITS, UPDATE_HABIT } from "../../../utils/queries";
+import { GET_WEEKLY_HABITS } from "../../../utils/queries";
+// @ts-ignore
+import { UPDATE_HABIT } from "../../../utils/queries";
 import React from "react";
 
-interface DailyHabitsColumn {
+interface DailyHabitsColumnProps {
   dayNum: string;
-  habits?: { name: string; completed: boolean; id: string }[];
+  habits?: {
+    id: string;
+    completed: boolean;
+    name: string;
+  }[];
 }
 
-export const DailyHabitsColumn: FC<DailyHabitsColumn> = ({
+export const DailyHabitsColumn: FC<DailyHabitsColumnProps> = ({
   dayNum,
   habits,
 }) => {
@@ -40,7 +46,6 @@ export const DailyHabitsColumn: FC<DailyHabitsColumn> = ({
 
   return (
     <div
-      // onClick={() => console.log(habits)}
       style={{
         backgroundColor: habits === undefined ? "gray" : "",
         border:
@@ -48,6 +53,7 @@ export const DailyHabitsColumn: FC<DailyHabitsColumn> = ({
             ? "2px solid red"
             : "",
       }}
+      // onClick={() => console.log(habits)}
     >
       <div>{dayNum}</div>
       <div>{dayOfWeek}</div>
@@ -66,7 +72,8 @@ export const DailyHabitsColumn: FC<DailyHabitsColumn> = ({
               },
             })
           }
-          style={{ opacity: habit.name === "blank" ? 0 : 1 }}
+          // style={{ opacity: habit.name === "blank" ? 0 : 1 }}
+          disabled={habit.name === "blank"}
         />
       ))}
     </div>
