@@ -2,7 +2,7 @@ import { useMutation } from "@apollo/client";
 import React, { useState } from "react";
 import { FC } from "react";
 import { useSelector } from "react-redux";
-import { GET_WEEKLY_HABITS, UPDATE_HABIT_NAME } from "../../../utils/queries";
+import { UPDATE_HABIT_NAME } from "../../../utils/queries";
 
 interface HabitNameProps {
   name: string;
@@ -15,16 +15,16 @@ export const HabitName: FC<HabitNameProps> = ({ name, id }) => {
   const currentPage = useSelector((state: any) => state.currentPage);
 
   const [updateHabit] = useMutation(UPDATE_HABIT_NAME, {
-    refetchQueries: [
-      {
-        query: GET_WEEKLY_HABITS,
-        variables: {
-          month: currentPage.date.month,
-          year: currentPage.date.year,
-          week: currentPage.date.week,
-        },
-      },
-    ],
+    // refetchQueries: [
+    //   {
+    //     query: GET_WEEKLY_HABITS,
+    //     variables: {
+    //       month: currentPage.date.month,
+    //       year: currentPage.date.year,
+    //       week: currentPage.date.week,
+    //     },
+    //   },
+    // ],
   });
 
   const handleSave = () => {
@@ -35,7 +35,7 @@ export const HabitName: FC<HabitNameProps> = ({ name, id }) => {
         name: habitName,
       },
     });
-    console.log({ pageId: currentPage.id, habitId: id, name: habitName });
+
     setEditing(false);
   };
 

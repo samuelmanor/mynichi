@@ -242,6 +242,24 @@ const resolvers = {
       );
 
       await page.save();
+
+      // update pages in the same week with the same habit
+      const weekPages = await Page.find({
+        "date.month": page.date.month,
+        "date.week": page.date.week,
+        "date.year": page.date.year,
+      });
+
+      const updatedHabitIndex = page.habits.findIndex(
+        (habit) => habit._id.toString() === args.habitId
+      );
+
+      weekPages.forEach((weekPage) => {
+        weekPage.habits[updatedHabitIndex].name = args.name;
+        weekPage.habits[updatedHabitIndex].completed = false;
+        weekPage.save();
+      });
+
       return page;
     },
   },
