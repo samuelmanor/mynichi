@@ -2,7 +2,7 @@ import { useMutation } from "@apollo/client";
 import { FC } from "react";
 import { useSelector } from "react-redux";
 import { GET_WEEKLY_HABITS } from "../../../utils/queries";
-import { UPDATE_HABIT } from "../../../utils/queries";
+import { UPDATE_HABIT_COMPLETION } from "../../../utils/queries";
 import React from "react";
 
 interface DailyHabitsColumnProps {
@@ -29,7 +29,7 @@ export const DailyHabitsColumn: FC<DailyHabitsColumnProps> = ({
     .split(" ")[0]
     .toLowerCase()[0];
 
-  const [updateHabit] = useMutation(UPDATE_HABIT, {
+  const [updateHabit] = useMutation(UPDATE_HABIT_COMPLETION, {
     refetchQueries: [
       {
         query: GET_WEEKLY_HABITS,
@@ -66,7 +66,6 @@ export const DailyHabitsColumn: FC<DailyHabitsColumnProps> = ({
                 pageId: currentPage.id,
                 habitId: habit.id,
                 completed: !habit.completed,
-                name: habit.name,
               },
             })
           }

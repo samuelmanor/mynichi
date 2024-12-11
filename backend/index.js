@@ -60,12 +60,13 @@ const typeDefs = `
     getPreviousPage(id: String!): PageInfo
     getNextPage(id: String!): PageInfo
     getWeeklyHabits(week: Int!, month: Int!, year: Int!): [WeeklyHabits]
-    getHabitNames(week: Int!, month: Int!, year: Int!): [String]
+    getTodaysHabits(day: Int!, month: Int!, year: Int!): [Habit]
   }
 
   type Mutation {
     addPage: Page
-    updateHabit(pageId: ID!, habitId: ID!, name: String, completed: Boolean): Habit
+    updateHabitCompletion(pageId: ID!, habitId: ID!, completed: Boolean!): Page
+    updateHabitName(pageId: ID!, habitId: ID!, name: String!): Page
   }
 `;
 
@@ -137,23 +138,19 @@ const resolvers = {
         throw new GraphQLError("No habits found for the week");
       }
     },
-    getHabitNames: async (root, args) => {
-      const habits = await Page.find({
+    getTodaysHabits: async (root, args) => {
+      const habits = await Page.findOne({
         "date.month": args.month,
-        "date.week": args.week,
+        "date.day.number": args.day,
         "date.year": args.year,
-      }).then((pages) => {
-        const habitNames = pages.map((page) => {
-          return page.habits.map((habit) => habit.name);
-        });
-
-        return habitNames.flat().slice(0, 4);
+      }).then((page) => {
+        return page.habits;
       });
 
       if (habits) {
         return habits;
       } else {
-        throw new GraphQLError("No habits found for the week");
+        throw new GraphQLError("No habits found for the day");
       }
     },
   },
@@ -213,24 +210,39 @@ const resolvers = {
       const savedPage = await newPage.save();
       return savedPage;
     },
-    updateHabit: async (root, args) => {
-      if (args.name === undefined && args.completed === undefined) {
-        throw new GraphQLError("No data to update");
-      }
-
-      const page = await Page.findById(args.pageId);
-      const habit = page.habits.filter((habit) => habit.id === args.habitId)[0];
-
-      if (args.name !== undefined) {
-        habit.name = args.name;
-      }
-
-      if (args.completed !== undefined) {
-        habit.completed = args.completed;
-      }
+    updateHabitCompletion: async (root, args) => {
+      const page = await Page.findByIdAndUpdate(
+        args.pageId,
+        {
+          $set: {
+            "habits.$[habit].completed": args.completed,
+          },
+        },
+        {
+          arrayFilters: [{ "habit._id": args.habitId }],
+          new: true,
+        }
+      );
 
       await page.save();
-      return habit;
+      return page;
+    },
+    updateHabitName: async (root, args) => {
+      const page = await Page.findByIdAndUpdate(
+        args.pageId,
+        {
+          $set: {
+            "habits.$[habit].name": args.name,
+          },
+        },
+        {
+          arrayFilters: [{ "habit._id": args.habitId }],
+          new: true,
+        }
+      );
+
+      await page.save();
+      return page;
     },
   },
 };

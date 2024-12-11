@@ -2,12 +2,13 @@ import React, { FC } from "react";
 import { formatMonth } from "../../utils/formatMonth";
 import { useSelector } from "react-redux";
 import {
+  GET_TODAYS_HABITS,
   GET_WEEKLY_HABITS,
-  UPDATE_HABIT,
-  GET_HABIT_NAMES,
+  UPDATE_HABIT_COMPLETION,
 } from "../../utils/queries";
 import { useMutation, useQuery } from "@apollo/client";
 import { DailyHabitsColumn } from "./DailyHabitsColumn";
+import { HabitName } from "./HabitName";
 
 interface HabitTrackerProps {}
 
@@ -19,7 +20,7 @@ export const HabitTracker: FC<HabitTrackerProps> = () => {
     currentPage.date.year
   )[currentPage.date.week - 1];
 
-  const habits = useQuery(GET_WEEKLY_HABITS, {
+  const weeklyHabits = useQuery(GET_WEEKLY_HABITS, {
     variables: {
       month: currentPage.date.month,
       year: currentPage.date.year,
@@ -27,11 +28,15 @@ export const HabitTracker: FC<HabitTrackerProps> = () => {
     },
   });
 
-  const habitNames = useQuery(GET_HABIT_NAMES, {
+  // const habitNames = habits?.data?.getWeeklyHabits?.filter(
+  //   (habit: any) => habit.day === currentPage.date.day.number
+  // )[0].habits;
+
+  const todaysHabits = useQuery(GET_TODAYS_HABITS, {
     variables: {
       month: currentPage.date.month,
+      day: currentPage.date.day.number,
       year: currentPage.date.year,
-      week: currentPage.date.week,
     },
   });
 
@@ -39,26 +44,31 @@ export const HabitTracker: FC<HabitTrackerProps> = () => {
     <div>
       habit tracker
       <button onClick={() => console.log(currentWeek)}>cl week</button>
-      <button onClick={() => console.log(habits.data.getWeeklyHabits)}>
+      <button onClick={() => console.log(weeklyHabits.data.getWeeklyHabits)}>
         cl habits
       </button>
-      <div onClick={() => console.log(habitNames.data.getHabitNames)}>
-        cl habit names
+      <div onClick={() => console.log(todaysHabits.data.getTodaysHabits)}>
+        cl
       </div>
       {currentWeek?.map((day, i) => (
         <DailyHabitsColumn
           key={i}
           dayNum={day.toString()}
           habits={
-            habits?.data?.getWeeklyHabits?.filter(
+            weeklyHabits?.data?.getWeeklyHabits?.filter(
               (habit: { day: number; habit: object }) => habit.day === day
             )[0]?.habits
           }
         />
       ))}
-      {habitNames?.data?.getHabitNames?.map((name: string, i: number) => (
-        <div key={`${name}${i}`}>{name}</div>
-      ))}
+      {todaysHabits?.data?.getTodaysHabits?.map(
+        (
+          habit: { id: string; completed: boolean; name: string },
+          i: number
+        ) => (
+          <HabitName id={habit.id} name={habit.name} key={habit.id} />
+        )
+      )}
     </div>
   );
 };
