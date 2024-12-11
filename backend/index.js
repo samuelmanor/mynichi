@@ -254,10 +254,9 @@ const resolvers = {
         (habit) => habit._id.toString() === args.habitId
       );
 
-      weekPages.forEach((weekPage) => {
-        weekPage.habits[updatedHabitIndex].name = args.name;
-        weekPage.habits[updatedHabitIndex].completed = false;
-        weekPage.save();
+      weekPages.forEach((page) => {
+        page.habits[updatedHabitIndex].name = args.name;
+        page.save();
       });
 
       return page;
