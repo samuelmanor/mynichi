@@ -70,8 +70,8 @@ export const DailyHabitsColumn: FC<DailyHabitsColumnProps> = ({
               },
             })
           }
-          // style={{ opacity: habit.name === "blank" ? 0 : 1 }}
-          disabled={habit.name === "blank"}
+          style={{ opacity: habit.name === "blank" ? 0 : 1 }}
+          disabled={dayNum !== currentPage.date.day.number.toString()}
         />
       ))}
     </div>
