@@ -1,12 +1,9 @@
 import { useLazyQuery, useQuery } from "@apollo/client";
 import React, { useEffect, useState } from "react";
 import { FC } from "react";
-// @ts-ignore
 import { GET_NEXT_PAGE, GET_PREVIOUS_PAGE } from "../../utils/queries";
-// @ts-ignore
 import { FIND_PAGE } from "../../utils/queries";
 import { useDispatch, useSelector } from "react-redux";
-// @ts-ignore
 import { setCurrentPage } from "../../reducers/PageReducer";
 import { getFormattedDate } from "../../utils/getFormattedDate";
 

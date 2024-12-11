@@ -1,10 +1,11 @@
 import React, { FC } from "react";
 import { formatMonth } from "../../utils/formatMonth";
 import { useSelector } from "react-redux";
-// @ts-ignore
-import { GET_WEEKLY_HABITS, UPDATE_HABIT } from "../../utils/queries";
-// @ts-ignore
-import { GET_HABIT_NAMES } from "../../utils/queries";
+import {
+  GET_WEEKLY_HABITS,
+  UPDATE_HABIT,
+  GET_HABIT_NAMES,
+} from "../../utils/queries";
 import { useMutation, useQuery } from "@apollo/client";
 import { DailyHabitsColumn } from "./DailyHabitsColumn";
 
@@ -56,7 +57,7 @@ export const HabitTracker: FC<HabitTrackerProps> = () => {
         />
       ))}
       {habitNames?.data?.getHabitNames?.map((name: string, i: number) => (
-        <div key={`habit-${name}${i}`}>{name}</div>
+        <div key={`${name}${i}`}>{name}</div>
       ))}
     </div>
   );

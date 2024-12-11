@@ -1,9 +1,7 @@
 import { useMutation } from "@apollo/client";
 import { FC } from "react";
 import { useSelector } from "react-redux";
-// @ts-ignore
 import { GET_WEEKLY_HABITS } from "../../../utils/queries";
-// @ts-ignore
 import { UPDATE_HABIT } from "../../../utils/queries";
 import React from "react";
 

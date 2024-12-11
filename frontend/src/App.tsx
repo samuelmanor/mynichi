@@ -3,10 +3,8 @@ import { useEffect } from "react";
 // import { Page } from "./components/Page";
 // import { NavArrow } from "./components/NavArrow";
 import { useDispatch } from "react-redux";
-// @ts-ignore
 import { setCurrentPage } from "./reducers/PageReducer";
 import { useMutation, useQuery } from "@apollo/client";
-// @ts-ignore
 import { ADD_PAGE, GET_PAGE_COUNT } from "./utils/queries";
 import { Page } from "./components/Page";
 import { NavArrow } from "./components/NavArrow";
