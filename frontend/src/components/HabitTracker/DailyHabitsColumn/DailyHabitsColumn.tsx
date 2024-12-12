@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { GET_WEEKLY_HABITS } from "../../../utils/queries";
 import { UPDATE_HABIT_COMPLETION } from "../../../utils/queries";
 import React from "react";
+import { Grid2, Radio, Typography } from "@mui/material";
 
 interface DailyHabitsColumnProps {
   dayNum: string;
@@ -43,23 +44,25 @@ export const DailyHabitsColumn: FC<DailyHabitsColumnProps> = ({
   });
 
   return (
-    <div
-      style={{
-        backgroundColor: habits === undefined ? "gray" : "",
-        border:
-          dayNum === currentPage.date.day.number.toString()
-            ? "2px solid red"
-            : "",
+    <Grid2
+      container
+      sx={{
+        flexDirection: "column",
+        border: "2px solid red",
+        width: "50px",
+        textAlign: "center",
+        alignItems: "center",
+        backgroundColor:
+          dayNum === currentPage.date.day.number.toString() ? "red" : "white",
       }}
-      // onClick={() => console.log(habits)}
     >
-      <div>{dayNum}</div>
-      <div>{dayOfWeek}</div>
+      <Typography variant="body1">{dayNum}</Typography>
+      <Typography variant="body1">{dayOfWeek}</Typography>
       {habits?.map((habit, i) => (
-        <input
+        <Radio
           key={i}
-          type="checkbox"
-          defaultChecked={habit.completed}
+          checked={habit.completed}
+          sx={{ width: "fit-content" }}
           onClick={() =>
             updateHabit({
               variables: {
@@ -69,10 +72,9 @@ export const DailyHabitsColumn: FC<DailyHabitsColumnProps> = ({
               },
             })
           }
-          style={{ opacity: habit.name === "blank" ? 0 : 1 }}
           disabled={dayNum !== currentPage.date.day.number.toString()}
         />
       ))}
-    </div>
+    </Grid2>
   );
 };
