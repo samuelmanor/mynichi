@@ -21,6 +21,8 @@ export const DailyHabitsColumn: FC<DailyHabitsColumnProps> = ({
 }) => {
   const currentPage = useSelector((state: any) => state.currentPage);
 
+  const selectedDate = dayNum === currentPage.date.day.number.toString();
+
   const dayOfWeek = new Date(
     currentPage.date.year,
     currentPage.date.month - 1,
@@ -48,21 +50,48 @@ export const DailyHabitsColumn: FC<DailyHabitsColumnProps> = ({
       container
       sx={{
         flexDirection: "column",
-        border: "2px solid red",
+        // border: "2px solid red",
         width: "50px",
         textAlign: "center",
         alignItems: "center",
-        backgroundColor:
-          dayNum === currentPage.date.day.number.toString() ? "red" : "white",
+        backgroundColor: selectedDate ? "#A89157" : "",
+        borderRadius: "5px",
+        fontFamily: "Fjalla One",
       }}
     >
-      <Typography variant="body1">{dayNum}</Typography>
-      <Typography variant="body1">{dayOfWeek}</Typography>
+      <Typography
+        variant="body1"
+        sx={{
+          opacity: parseInt(dayNum) !== 0 ? "" : "0",
+          color: selectedDate ? "#F7F7F7" : "#D3CDB1",
+        }}
+      >
+        {dayNum}
+      </Typography>
+      <Typography
+        variant="body1"
+        sx={{
+          opacity: parseInt(dayNum) !== 0 ? "" : "0",
+          color: selectedDate ? "#F7F7F7" : "#525252",
+        }}
+      >
+        {dayOfWeek}
+      </Typography>
       {habits?.map((habit, i) => (
         <Radio
           key={i}
           checked={habit.completed}
-          sx={{ width: "fit-content" }}
+          sx={{
+            width: "fit-content",
+            color: selectedDate ? "#F7F7F7" : "#525252",
+            opacity: habit.name === "blank" ? "0" : "",
+            "&.Mui-checked": {
+              color: selectedDate ? "#F7F7F7" : "#525252",
+            },
+            "&.Mui-disabled": {
+              color: selectedDate ? "#F7F7F7" : "#525252",
+            },
+          }}
           onClick={() =>
             updateHabit({
               variables: {

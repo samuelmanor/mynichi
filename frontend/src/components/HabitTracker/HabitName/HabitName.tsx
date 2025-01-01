@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { FC } from "react";
 import { useSelector } from "react-redux";
 import { UPDATE_HABIT_NAME, GET_WEEKLY_HABITS } from "../../../utils/queries";
-import { Grid2 } from "@mui/material";
+import { Button, Grid2, IconButton, Typography } from "@mui/material";
 
 interface HabitNameProps {
   name: string;
@@ -73,12 +73,17 @@ export const HabitName: FC<HabitNameProps> = ({ name, id }) => {
     <Grid2
       container
       sx={{
-        // border: "2px solid blue",
         height: "42px",
         alignItems: "center",
+        minWidth: "50px",
+        justifyContent: "end",
       }}
     >
-      name
+      {name === "blank" ? (
+        <Button>+</Button>
+      ) : (
+        <Typography sx={{ fontFamily: "Cantarell" }}>{name}</Typography>
+      )}
     </Grid2>
   );
 };
